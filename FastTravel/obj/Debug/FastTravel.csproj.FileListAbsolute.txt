@@ -1,6 +1,0 @@
-D:\C# Apps\FastTravel\FastTravel\bin\Debug\FastTravel.dll
-D:\C# Apps\FastTravel\FastTravel\bin\Debug\FastTravel.pdb
-D:\C# Apps\FastTravel\FastTravel\obj\Debug\FastTravel.csprojResolveAssemblyReference.cache
-D:\C# Apps\FastTravel\FastTravel\obj\Debug\FastTravel.dll
-D:\C# Apps\FastTravel\FastTravel\obj\Debug\FastTravel.pdb
-D:\C# Apps\FastTravel\FastTravel\bin\Debug\config.json
