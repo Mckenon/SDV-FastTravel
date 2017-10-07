@@ -11,6 +11,16 @@ namespace FastTravel
     public class FastTravelUtils
     {
         /// <summary>
+        /// Checks if a point exists within the config.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public static bool PointExistsInConfig(ClickableComponent point)
+        {
+            return ModEntry.Config.FastTravelPoints.Any(t => point.name.StartsWith(t.MapName.Replace("{0}", Game1.player.farmName)));
+        }
+
+        /// <summary>
         /// Gets a GameLocation for a corresponding Point(from the Map)
         /// </summary>
         /// <param name="point"></param>

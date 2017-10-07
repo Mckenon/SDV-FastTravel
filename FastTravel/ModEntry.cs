@@ -59,6 +59,13 @@ namespace FastTravel
                 if (point.name == "Lonely Stone" || point.name == "Quarry")
                     continue;
 
+                // Make sure the location is valid
+                if (!FastTravelUtils.PointExistsInConfig(point))
+                {
+                    Monitor.Log($"Failed to find a warp for point [{point.name}]!", LogLevel.Warn);
+                    continue;
+                }
+
                 // Get the location, and warp the player to it's first warp.
                 var location = FastTravelUtils.GetLocationForMapPoint(point);
                 var fastTravelPoint = FastTravelUtils.GetFastTravelPointForMapPoint(point);
