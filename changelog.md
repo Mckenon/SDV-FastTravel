@@ -1,4 +1,8 @@
 # Changelog
+## 1.0.3
+### Changed
+- Fixed a bug with NPC names breaking fast travel(Hopefully)
+
 ## 1.0.2
 ### Changed
 - Corrected the nexus ID in ``manifest.json``
