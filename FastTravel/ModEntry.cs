@@ -27,12 +27,17 @@ namespace FastTravel
         {
             Config = helper.ReadConfig<ModConfig>();
             ControlEvents.MouseChanged += this.ControlEvents_MouseChanged;
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
         }
 
         private void ControlEvents_MouseChanged(object sender, EventArgsMouseStateChanged e)
         {
             // If the world isn't ready, or the player didn't left click, we have nothing to work with.
             if (!Context.IsWorldReady || e.NewState.LeftButton != ButtonState.Pressed)
+                return;
+
+            // Do balanced behavior.
+            if (Config.BalancedMode && Game1.player.getMount() == null)
                 return;
 
             // Create a reference to the current menu, and make sure it isn't null.
@@ -70,6 +75,10 @@ namespace FastTravel
                 var location = FastTravelUtils.GetLocationForMapPoint(point);
                 var fastTravelPoint = FastTravelUtils.GetFastTravelPointForMapPoint(point);
 
+                // If the player is in balanced mode, block warping to calico altogether.
+                if (Config.BalancedMode && fastTravelPoint.GameLocationIndex == 28)
+                    return;
+
                 // Dismount the player if they're going to calico desert, since the bus glitches with mounts.
                 if (fastTravelPoint.GameLocationIndex == 28 && Game1.player.getMount() != null)
                     Game1.player.dismount();
@@ -80,6 +89,15 @@ namespace FastTravel
 
                 // Finally, log that we were warped.
                 this.Monitor.Log($"Warping player to " + point.name);
+            }
+        }
+
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        {
+            if (e.KeyPressed == Keys.N)
+            {
+                Config.BalancedMode = !Config.BalancedMode;
+                Game1.showGlobalMessage("Balanced Mode: " + Config.BalancedMode);
             }
         }
     }
