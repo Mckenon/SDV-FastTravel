@@ -46,10 +46,6 @@ namespace FastTravel
             if (!Context.IsWorldReady || e.NewState.LeftButton != ButtonState.Pressed)
                 return;
 
-            // Do balanced behavior.
-            if (Config.BalancedMode && Game1.player.getMount() == null)
-                return;
-
             // Create a reference to the current menu, and make sure it isn't null.
             var menu = (Game1.activeClickableMenu as GameMenu);
             if (menu == null || menu.currentTab != GameMenu.mapTab)   // Also make sure it's on the right tab(Map)
@@ -59,6 +55,15 @@ namespace FastTravel
             var mapPage = (Helper.Reflection.GetPrivateField<List<IClickableMenu>>(menu, "pages").GetValue()[3]) as MapPage;
             if (mapPage == null)    // Gotta be safe
                 return;
+
+            // Do balanced behavior.
+            // (This is done after getting the map/menu to prevent spamming notifications when the player isn't in the menu)
+            if (Config.BalancedMode && Game1.player.getMount() == null)
+            {
+                Game1.showGlobalMessage("You can't fast travel without a horse!");
+                Game1.exitActiveMenu();
+                return;
+            }
 
             int x = Game1.getMouseX();
             int y = Game1.getMouseY();
@@ -71,7 +76,7 @@ namespace FastTravel
                 // Lonely Stone is blocked because it's not an actual place
                 // Quarry is blocked because it's broken currently.
                 // TODO - Fix the visual bug with Quarry
-                if (point.name == "Lonely Stone" || point.name == "Quarry")
+                if (point.name == "Lonely Stone")
                     continue;
 
                 // Make sure the location is valid
@@ -93,7 +98,11 @@ namespace FastTravel
 
                 // If the player is in balanced mode, block warping to calico altogether.
                 if (Config.BalancedMode && fastTravelPoint.GameLocationIndex == 28)
+                {
+                    Game1.showGlobalMessage("Fast-Travel to Calico Desert is disabled in balanced mode!");
+                    Game1.exitActiveMenu();
                     return;
+                }
 
                 // Dismount the player if they're going to calico desert, since the bus glitches with mounts.
                 if (fastTravelPoint.GameLocationIndex == 28 && Game1.player.getMount() != null)

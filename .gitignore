@@ -25,3 +25,6 @@ _ReSharper*/
 *.nuget.targets
 
 _releases
+FastTravel/bin/
+
+FastTravel/obj/
