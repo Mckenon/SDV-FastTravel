@@ -61,7 +61,7 @@ namespace FastTravel
                 // Lonely Stone is blocked because it's not an actual place
                 // Quarry is blocked because it's broken currently.
                 // TODO - Fix the visual bug with Quarry
-                if (point.name == "Lonely Stone" || point.name == "Quarry")
+                if (point.name == "Lonely Stone")
                     continue;
 
                 // Make sure the location is valid
