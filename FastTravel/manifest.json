@@ -3,8 +3,8 @@
    "Author": "@DeathGameDev",
    "Version": {
       "MajorVersion": 1,
-      "MinorVersion": 0,
-      "PatchVersion": 2,
+      "MinorVersion": 1,
+      "PatchVersion": 0,
       "Build": null
    },
    "Description": "Adds the ability to fast travel to any location on the map",
