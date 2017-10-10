@@ -1,4 +1,13 @@
 # Changelog
+## 1.1.0
+### Added
+- 'Balanced' Mode, which prevents the player from fast travelling unless they are on a horse, and blocks fast travel to Calico Desert altogether.
+- Warning when attempting to warp into an area that is preparing for a festival. **[DrCreo]**
+
+### Changed
+- Changed the spawn location for Calico Desert in order to avoid the bus cutscene **[PathosChild]**
+- Changed spawn location of Quarry to the end of the bridge, fixes a visual bug seen when spawning directly in the quarry.
+
 ## 1.0.3
 ### Changed
 - Fixed a bug with NPC names breaking fast travel(Hopefully)
