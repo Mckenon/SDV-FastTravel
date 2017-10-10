@@ -14,8 +14,10 @@
     <Task>
       <Reference Include="System.IO" />
       <Reference Include="System.IO.Compression" />
+      <Reference Include="System.Web.Extensions"/>
       <Using Namespace="System.IO" />
       <Using Namespace="System.IO.Compression" />
+      <Using Namespace="System.Web.Script.Serialization"/>
       <Code Type="Fragment" Language="cs">
         <![CDATA[
         try
@@ -23,8 +25,27 @@
            // create output path if needed
            Directory.CreateDirectory(OutputFolderPath);
 
+           // Get the file JSON string
+           string json = "";
+           foreach(ITaskItem file in Files)
+           {
+              if(Path.GetFileName(file.ItemSpec).ToLower() != "manifest.json")
+                continue;
+              json = File.ReadAllText(file.ItemSpec);
+              break;
+           }
+           
+           IDictionary<string, object> data = (IDictionary<string, object>)new JavaScriptSerializer().DeserializeObject(json);
+           IDictionary<string, object> version = (IDictionary<string, object>)data["Version"];
+           
+           int major = (int)version["MajorVersion"];
+           int minor = (int)version["MinorVersion"];
+           int patch = (int)version["PatchVersion"];
+           
+           string fileName = String.Format("{0}-{1}.{2}.{3}.zip", ModName, major, minor, patch);
+           
            // clear old zip file if present
-           string zipPath = Path.Combine(OutputFolderPath, ModName + ".zip");
+           string zipPath = Path.Combine(OutputFolderPath, fileName);
            if (File.Exists(zipPath))
               File.Delete(zipPath);
 
@@ -36,7 +57,7 @@
               {
                  // get file info
                  string filePath = file.ItemSpec;
-                 string entryName = file.GetMetadata("RecursiveDir") + file.GetMetadata("Filename") + file.GetMetadata("Extension");
+                 string entryName = ModName + '/' + file.GetMetadata("RecursiveDir") + file.GetMetadata("Filename") + file.GetMetadata("Extension");
                  if (new FileInfo(filePath).Directory.Name.Equals("i18n", StringComparison.InvariantCultureIgnoreCase))
                     entryName = Path.Combine("i18n", entryName);
 
