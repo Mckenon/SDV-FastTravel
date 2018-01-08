@@ -48,12 +48,12 @@ namespace FastTravel
 
             // Create a reference to the current menu, and make sure it isn't null.
             var menu = (Game1.activeClickableMenu as GameMenu);
-            if (menu == null || menu.currentTab != GameMenu.mapTab)   // Also make sure it's on the right tab(Map)
+            if (menu == null || menu.currentTab != GameMenu.mapTab) // Also make sure it's on the right tab(Map)
                 return;
 
             // Get the map page from the menu.
             var mapPage = (Helper.Reflection.GetPrivateField<List<IClickableMenu>>(menu, "pages").GetValue()[3]) as MapPage;
-            if (mapPage == null)    // Gotta be safe
+            if (mapPage == null) // Gotta be safe
                 return;
 
             // Do balanced behavior.
@@ -106,7 +106,7 @@ namespace FastTravel
 
                 // Dismount the player if they're going to calico desert, since the bus glitches with mounts.
                 if (fastTravelPoint.GameLocationIndex == 28 && Game1.player.getMount() != null)
-                    Game1.player.dismount();
+                    Game1.player.getMount().dismount();
 
                 // Warp the player to their location, and exit the map.
                 Game1.warpFarmer(fastTravelPoint.RerouteName == null ? location.name : fastTravelPoint.RerouteName, fastTravelPoint.SpawnPosition.X, fastTravelPoint.SpawnPosition.Y, false);
@@ -115,7 +115,7 @@ namespace FastTravel
                 // Lets check for warp status and give the player feed back on what happened to the warp.
                 // We are doing this check on a thread because we have to wait untill the warp has finished
                 // to check its result.
-                var locationNames = new String[]{ fastTravelPoint.RerouteName, location.Name }; 
+                var locationNames = new String[] {fastTravelPoint.RerouteName, location.Name};
                 var t1 = new Thread(new ParameterizedThreadStart(CheckIfWarped));
                 t1.Start(locationNames);
             }
@@ -123,7 +123,7 @@ namespace FastTravel
 
         private void CheckIfWarped(object locationNames)
         {
-            var locNames = (string[])locationNames;
+            var locNames = (string[]) locationNames;
 
             // We need to wait atleast 1.5 seconds to let the location change be complet before checking for it.
             Thread.Sleep(1500);
@@ -143,10 +143,12 @@ namespace FastTravel
 
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (e.KeyPressed == Keys.N)
+            switch (e.KeyPressed)
             {
-                Config.BalancedMode = !Config.BalancedMode;
-                Game1.showGlobalMessage("Balanced Mode: " + Config.BalancedMode);
+                case Keys.N:
+                    Config.BalancedMode = !Config.BalancedMode;
+                    Game1.showGlobalMessage("Balanced Mode: " + Config.BalancedMode);
+                    break;
             }
         }
     }

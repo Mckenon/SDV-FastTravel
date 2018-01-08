@@ -1,4 +1,8 @@
 # Changelog
+## 1.1.1
+### Changed
+- Fixed bug with horse when fast travelling to Calico Desert.
+
 ## 1.1.0
 ### Added
 - 'Balanced' Mode, which prevents the player from fast travelling unless they are on a horse, and blocks fast travel to Calico Desert altogether.
