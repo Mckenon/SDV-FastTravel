@@ -1,4 +1,8 @@
 # Changelog
+## 1.2.0
+### Changed
+- Updated for Stardew Valley 1.3.
+
 ## 1.1.1
 ### Changed
 - Fixed bug with horse when fast travelling to Calico Desert.
