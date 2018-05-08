@@ -1,14 +1,10 @@
 ﻿{
-   "Name": "FastTravel",
-   "Author": "@DeathGameDev",
-   "Version": {
-      "MajorVersion": 1,
-      "MinorVersion": 1,
-      "PatchVersion": 0,
-      "Build": null
-   },
-   "Description": "Adds the ability to fast travel to any location on the map",
-   "UniqueID": "DeathGameDev.FastTravel",
-   "EntryDll": "FastTravel.dll",
-   "UpdateKeys":  ["Nexus: 1529"]
+  "Name": "FastTravel",
+  "Author": "@DeathGameDev",
+  "Version": "1.2.0",
+  "Description": "Adds the ability to fast travel to any location on the map",
+  "UniqueID": "DeathGameDev.FastTravel",
+  "EntryDll": "FastTravel.dll",
+  "MinimumApiVersion": "2.6-beta",
+  "UpdateKeys": [ "Nexus: 1529" ]
 }

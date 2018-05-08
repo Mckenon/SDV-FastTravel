@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Menus;
 using System.Threading;
 
@@ -52,7 +48,7 @@ namespace FastTravel
                 return;
 
             // Get the map page from the menu.
-            var mapPage = (Helper.Reflection.GetPrivateField<List<IClickableMenu>>(menu, "pages").GetValue()[3]) as MapPage;
+            var mapPage = (Helper.Reflection.GetField<List<IClickableMenu>>(menu, "pages").GetValue()[3]) as MapPage;
             if (mapPage == null) // Gotta be safe
                 return;
 
@@ -109,7 +105,7 @@ namespace FastTravel
                     Game1.player.getMount().dismount();
 
                 // Warp the player to their location, and exit the map.
-                Game1.warpFarmer(fastTravelPoint.RerouteName == null ? location.name : fastTravelPoint.RerouteName, fastTravelPoint.SpawnPosition.X, fastTravelPoint.SpawnPosition.Y, false);
+                Game1.warpFarmer(fastTravelPoint.RerouteName == null ? location.Name : fastTravelPoint.RerouteName, fastTravelPoint.SpawnPosition.X, fastTravelPoint.SpawnPosition.Y, false);
                 Game1.exitActiveMenu();
 
                 // Lets check for warp status and give the player feed back on what happened to the warp.
@@ -133,7 +129,7 @@ namespace FastTravel
             var tmpLocName = locNames[0] ?? locNames[1];
 
             // Check if we are at the new location and if its a festival day.
-            if (Game1.currentLocation.name != tmpLocName && Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason))
+            if (Game1.currentLocation.Name != tmpLocName && Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason))
                 // If there is a festival and we werent able to warp let the player know.
                 Game1.showGlobalMessage($"Today's festival is being set up. Try going later.");
             else
