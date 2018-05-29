@@ -54,7 +54,7 @@ namespace FastTravel
 
             // Do balanced behavior.
             // (This is done after getting the map/menu to prevent spamming notifications when the player isn't in the menu)
-            if (Config.BalancedMode && Game1.player.getMount() == null)
+            if (Config.BalancedMode && Game1.player.mount == null)
             {
                 Game1.showGlobalMessage("You can't fast travel without a horse!");
                 Game1.exitActiveMenu();
@@ -101,8 +101,8 @@ namespace FastTravel
                 }
 
                 // Dismount the player if they're going to calico desert, since the bus glitches with mounts.
-                if (fastTravelPoint.GameLocationIndex == 28 && Game1.player.getMount() != null)
-                    Game1.player.getMount().dismount();
+                if (fastTravelPoint.GameLocationIndex == 28 && Game1.player.mount != null)
+                    Game1.player.mount.dismount();
 
                 // Warp the player to their location, and exit the map.
                 Game1.warpFarmer(fastTravelPoint.RerouteName == null ? location.Name : fastTravelPoint.RerouteName, fastTravelPoint.SpawnPosition.X, fastTravelPoint.SpawnPosition.Y, false);
