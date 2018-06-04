@@ -6,5 +6,5 @@
   "UniqueID": "DeathGameDev.FastTravel",
   "EntryDll": "FastTravel.dll",
   "MinimumApiVersion": "2.6-beta",
-  "UpdateKeys": [ "Nexus: 1529" ]
+  "UpdateKeys": [ "Nexus:1529" ]
 }
