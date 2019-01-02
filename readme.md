@@ -5,7 +5,7 @@ This allows the player to quickly go from say, the mines, to the blacksmith.
 # Download
 The latest version of the mod can be found on **Nexus**:  
 [![Nexus-Logo](https://i.imgur.com/dJobTR2.png)](https://www.nexusmods.com/stardewvalley/mods/1529/?)  
-[(Direct link)](https://www.nexusmods.com/stardewvalley/mods/1529/?).
+[``(Direct link)``](https://www.nexusmods.com/stardewvalley/mods/1529/?)
 
 # Mod Support
 As this is my first mod, I decided not to add full support for others' mods. I knew that would simply be biting off more than I could chew, so instead I opted to use a configurable system for each warp. These can be edited / added in the config.json file.
