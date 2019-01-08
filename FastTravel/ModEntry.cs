@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
-using System.Threading;
 
 namespace FastTravel
 {
-    /// <summary>
-    /// The mod entry point.
-    /// </summary>
+    /// <summary>The mod entry point.</summary>
     public class ModEntry : Mod
     {
         public static ModConfig Config;
 
-        /// <summary>
-        /// The mod entry point, called after the mod is first loaded.
-        /// </summary>
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
@@ -83,7 +78,7 @@ namespace FastTravel
                     // Right now this closes the map and opens the players bag and doesn't give
                     // the player any information in game about what just happened
                     // so we tell them a warp point wasnt found and close the menu.
-                    Game1.showGlobalMessage($"No warp point found.");
+                    Game1.showGlobalMessage("No warp point found.");
                     Game1.exitActiveMenu();
                     continue;
                 }
@@ -105,21 +100,21 @@ namespace FastTravel
                     Game1.player.mount.dismount();
 
                 // Warp the player to their location, and exit the map.
-                Game1.warpFarmer(fastTravelPoint.RerouteName == null ? location.Name : fastTravelPoint.RerouteName, fastTravelPoint.SpawnPosition.X, fastTravelPoint.SpawnPosition.Y, false);
+                Game1.warpFarmer(fastTravelPoint.RerouteName ?? location.Name, fastTravelPoint.SpawnPosition.X, fastTravelPoint.SpawnPosition.Y, false);
                 Game1.exitActiveMenu();
 
                 // Lets check for warp status and give the player feed back on what happened to the warp.
                 // We are doing this check on a thread because we have to wait untill the warp has finished
                 // to check its result.
-                var locationNames = new String[] {fastTravelPoint.RerouteName, location.Name};
-                var t1 = new Thread(new ParameterizedThreadStart(CheckIfWarped));
+                var locationNames = new[] { fastTravelPoint.RerouteName, location.Name };
+                var t1 = new Thread(CheckIfWarped);
                 t1.Start(locationNames);
             }
         }
 
         private void CheckIfWarped(object locationNames)
         {
-            var locNames = (string[]) locationNames;
+            var locNames = (string[])locationNames;
 
             // We need to wait atleast 1.5 seconds to let the location change be complet before checking for it.
             Thread.Sleep(1500);
@@ -131,10 +126,10 @@ namespace FastTravel
             // Check if we are at the new location and if its a festival day.
             if (Game1.currentLocation.Name != tmpLocName && Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason))
                 // If there is a festival and we werent able to warp let the player know.
-                Game1.showGlobalMessage($"Today's festival is being set up. Try going later.");
+                Game1.showGlobalMessage("Today's festival is being set up. Try going later.");
             else
                 // Finally, if we managed to warp log that we were warped.
-                this.Monitor.Log($"Warping player to " + tmpLocName);
+                this.Monitor.Log($"Warping player to {tmpLocName}");
         }
 
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
@@ -143,7 +138,7 @@ namespace FastTravel
             {
                 case Keys.N:
                     Config.BalancedMode = !Config.BalancedMode;
-                    Game1.showGlobalMessage("Balanced Mode: " + Config.BalancedMode);
+                    Game1.showGlobalMessage($"Balanced Mode: {Config.BalancedMode}");
                     break;
             }
         }
