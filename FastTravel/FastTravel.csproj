@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>FastTravel</AssemblyName>
     <RootNamespace>FastTravel</RootNamespace>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <TargetFramework>net452</TargetFramework>
     <Platforms>x86</Platforms>
     <PlatformTarget>x86</PlatformTarget>
