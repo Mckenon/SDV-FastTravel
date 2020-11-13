@@ -93,40 +93,63 @@ namespace FastTravel
 					}
 
 					// Get the location, and warp the player to it's first warp.
-					var location = FastTravelUtils.GetLocationForMapPoint(point);
-					var fastTravelPoint = FastTravelUtils.GetFastTravelPointForMapPoint(point);
+					GameLocation targetLocation = FastTravelUtils.GetLocationForMapPoint(point);
+					FastTravelPoint targetPoint = FastTravelUtils.GetFastTravelPointForMapPoint(point);
 
-					// If the player is in balanced mode, block warping to calico altogether.
-					if (Config.BalancedMode && fastTravelPoint.GameLocationIndex == 28)
+					if (!CheckBalancedTransition(targetPoint, out string errorMessage))
 					{
-						Game1.showGlobalMessage("Fast-Travel to Calico Desert is disabled in balanced mode!");
+						Game1.showGlobalMessage(errorMessage);
 						Game1.exitActiveMenu();
 						return;
 					}
 
 					// Dismount the player if they're going to calico desert, since the bus glitches with mounts.
-					if (fastTravelPoint.GameLocationIndex == 28 && Game1.player.mount != null)
+					if (targetPoint.GameLocationIndex == 28 && Game1.player.mount != null)
 						Game1.player.mount.dismount();
-
+					
 					// Warp the player to their location, and exit the map.
-					Game1.warpFarmer(fastTravelPoint.RerouteName ?? location.Name, fastTravelPoint.SpawnPosition.X, fastTravelPoint.SpawnPosition.Y, false);
+					Game1.warpFarmer(targetPoint.RerouteName ?? targetLocation.Name, targetPoint.SpawnPosition.X, targetPoint.SpawnPosition.Y, false);
 					Game1.exitActiveMenu();
 
 					// Lets check for warp status and give the player feed back on what happened to the warp.
-					// We are doing this check on a thread because we have to wait untill the warp has finished
+					// We are doing this check on a thread because we have to wait until the warp has finished
 					// to check its result.
-					var locationNames = new[] {fastTravelPoint.RerouteName, location.Name};
+					var locationNames = new[] {targetPoint.RerouteName, targetLocation.Name};
 					var t1 = new Thread(CheckIfWarped);
 					t1.Start(locationNames);
 				}
 			}
 		}
 
+		// TODO - Convert inline int/string declarations to a constant class
+		private bool CheckBalancedTransition(FastTravelPoint targetPoint, out string errorMessage)
+		{
+			errorMessage = "";
+			if (!Config.BalancedMode)
+				return true;
+
+			// Block fast travel to calico entirely when balanced
+			if (targetPoint.GameLocationIndex == 28)
+			{
+				errorMessage = "Fast-Travel to Calico Desert is disabled in balanced mode!";
+				return false;	
+			}
+
+			// Block fast travel to the mines unless it has been unlocked.
+			if (targetPoint.GameLocationIndex == 25 && !Game1.player.mailReceived.Contains("CF_Mines"))
+			{
+				errorMessage = "You must unlock the Mines before fast travel is available in balanced mode!";
+				return false;
+			}
+
+			return true;
+		}
+		
 		private void CheckIfWarped(object locationNames)
 		{
 			var locNames = (string[]) locationNames;
 
-			// We need to wait atleast 1.5 seconds to let the location change be complet before checking for it.
+			// We need to wait atleast 1.5 seconds to let the location change complete before checking for it.
 			Thread.Sleep(1500);
 
 			// If RerouteName is null we want the LocationName instead.
