@@ -68,7 +68,7 @@ namespace FastTravel
 
 				int x = (int) e.Cursor.ScreenPixels.X;
 				int y = (int) e.Cursor.ScreenPixels.Y;
-				foreach (ClickableComponent point in mapPage.points)
+                foreach (ClickableComponent point in mapPage.points)
 				{
 					// If the player isn't hovering over this point, don't worry about anything.
 					if (!point.containsPoint(x, y))
@@ -79,15 +79,15 @@ namespace FastTravel
 					if (point.name == "Lonely Stone")
 						continue;
 
-					// Make sure the location is valid
-					if (!FastTravelUtils.PointExistsInConfig(point))
+                    // Make sure the location is valid
+                    if (!FastTravelUtils.PointExistsInConfig(point))
 					{
 						Monitor.Log($"Failed to find a warp for point [{point.name}]!", LogLevel.Warn);
 
-						// Right now this closes the map and opens the players bag and doesn't give
-						// the player any information in game about what just happened
-						// so we tell them a warp point wasnt found and close the menu.
-						Game1.showGlobalMessage("No warp point found.");
+                        // Right now this closes the map and opens the players bag and doesn't give
+                        // the player any information in game about what just happened
+                        // so we tell them a warp point wasnt found and close the menu.
+                        Game1.showGlobalMessage("No warp point found.");
 						Game1.exitActiveMenu();
 						continue;
 					}
@@ -135,12 +135,14 @@ namespace FastTravel
 				return false;	
 			}
 
-			// Block fast travel to the mines unless it has been unlocked.
-			if (targetPoint.GameLocationIndex == 25 && !Game1.player.mailReceived.Contains("CF_Mines"))
-			{
-				errorMessage = "You must unlock the Mines before fast travel is available in balanced mode!";
-				return false;
-			}
+            // Block fast travel to the mines unless it has been unlocked.
+            if (targetPoint.requires != null && targetPoint.requires?.mails.Length > 0)
+            {
+				if (!FastTravelUtils.CheckPointRequiredMails(targetPoint.requires?.mails)) {
+                    errorMessage = "You must unlock the Mines before fast travel is available in balanced mode!";
+                    return false;
+				}
+            }
 
 			return true;
 		}
