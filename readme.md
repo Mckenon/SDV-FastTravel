@@ -19,13 +19,17 @@ As an example, here is the warp for the town square:
 
 ```json
 {
-  "MapName": "Town Square",
   "GameLocationIndex": 3,
   "SpawnPosition": "29, 67",
   "RerouteName": "Town",
   "pointId": 1010
-}
+},
 ```
+
+## Note: 
+The `pointId`, is identify of point click on map. You can see on console, with debug mode ON typing `ft_helper debugmode 1` on console.
+
+And the `SpawnPosition` is a X, Y position of player inside the map. You can get this typing `ft_helper playerlocation` on console, to get your current location X, Y.
 
 If you had installed a mod which added a giant fountain in the middle of the town square for instance, you could move the spawn position up a few tiles on the Y axis(second number) to stop yourself from spawning inside of it.
 

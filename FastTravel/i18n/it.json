@@ -1,0 +1,14 @@
+{
+    "mail.CF_Mines": "You must unlock the Mines before fast travel in balanced mode!",
+    "mail.Visited_Island": "You must unlock the Island before fast travel in balanced mode!",
+    "mail.VisitedQuarryMine": "You must unlock the Mines before fast travel in balanced mode!",
+    "mail.summer_3_1": "You must unlock the Railroad before fast travel in balanced mode!",
+    "mail.beenToWoods": "You must unlock the Mines before fast travel in balanced mode!",
+    "TODAY_HAS_FESTIVAL": "Today's festival is being set up. Try going later.",
+    "WARPING": "Warping to {0}",
+    "DISABLED": "Fast-Travel to {0} is disabled in balanced mode",
+    "BALANCED_MODE_NEED_HORSE": "You can't fast travel without a horse!",
+    "BALANCED_MODE": "Balanced Mode",
+    "WARP_NOT_FOUND": "No warp point found",
+    "WARP_FAILED": "Failed to find a warp for point {0}"
+}

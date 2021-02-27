@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace FastTravel
+namespace FastTravel.src.models
 {
 	/// <summary>A fast travel point on the map.</summary>
 	[Serializable]
