@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FastTravel.src.models
+namespace FastTravel
 {
 	[Serializable]
 	public class ModConfig

@@ -4,10 +4,9 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
-using FastTravel.src.models;
 using System.Text;
 
-namespace FastTravel.src
+namespace FastTravel
 {
 	/// <summary>The mod entry point.</summary>
 	public class ModEntry : Mod

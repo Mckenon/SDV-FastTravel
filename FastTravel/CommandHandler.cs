@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using StardewModdingAPI;
 using StardewValley;
-using FastTravel.src.models;
 using System.Text;
 
-namespace FastTravel.src
+namespace FastTravel
 {
     internal class CommandHandler
     {

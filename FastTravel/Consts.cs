@@ -1,4 +1,4 @@
-﻿namespace FastTravel.src
+﻿namespace FastTravel
 {
     public static class Consts
     {

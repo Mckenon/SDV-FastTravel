@@ -1,4 +1,4 @@
-﻿namespace FastTravel.src.models
+﻿namespace FastTravel
 {
     public struct ValidationPointResult
     {

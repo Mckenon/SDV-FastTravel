@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using StardewValley;
 using StardewValley.Menus;
-using FastTravel.src.models;
 
-namespace FastTravel.src
+namespace FastTravel
 {
 	public class FastTravelUtils
 	{
