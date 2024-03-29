@@ -50,7 +50,7 @@ namespace FastTravel
             report.AppendLine("This location ID can be used on 'GameLocationIndex' field, on config.json\n");
             foreach (var location in Game1.locations)
             {
-                report.AppendLine($"  ID: {Game1.locations.IndexOf(location)} / Name: {location.name}");
+                report.AppendLine($"  ID: {Game1.locations.IndexOf(location)} / Name: {location.Name}");
             }
             report.AppendLine("################");
             this.Monitor.Log(report.ToString(), LogLevel.Info);
@@ -64,7 +64,7 @@ namespace FastTravel
             report.AppendLine("\n#### PLAYER LOCATION ####");
             report.AppendLine("The tile position X and Y, you can be used on 'SpawnPosition' field, on config.json\n");
             report.AppendLine($"  - currentLocation.Name: {Game1.currentLocation.Name}");
-            report.AppendLine($"  - player tile position: X => {Game1.player.getTileX()} | Y => {Game1.player.getTileY()}");
+            report.AppendLine($"  - player tile position: X => {Game1.player.Tile.X} | Y => {Game1.player.Tile.Y}");
             report.AppendLine("################");
             this.Monitor.Log(report.ToString(), LogLevel.Info);
         }

@@ -7,10 +7,11 @@
     <TargetFramework>net452</TargetFramework>
     <Platforms>x86</Platforms>
     <PlatformTarget>x86</PlatformTarget>
+	<GamePath>D:\Program Files\SteamLibrary\steamapps\common\Stardew Valley</GamePath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-beta.8" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -77,7 +77,7 @@ namespace FastTravel
 
 				int x = (int) e.Cursor.ScreenPixels.X;
 				int y = (int) e.Cursor.ScreenPixels.Y;
-                foreach (ClickableComponent point in mapPage.points)
+                foreach (ClickableComponent point in mapPage.points.Values)
 				{
 					// If the player isn't hovering over this point, don't worry about anything.
 					if (!point.containsPoint(x, y))
@@ -184,7 +184,7 @@ namespace FastTravel
 			Thread.Sleep(Consts.MillisecondsToCheckIfWarped);
 
             // Check if we are at the new location and if its a festival day.
-            bool hasFestivalToday = Game1.currentLocation.Name != locName && Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason);
+            bool hasFestivalToday = Game1.currentLocation.Name != locName && Utility.isFestivalDay();
 
             if (hasFestivalToday)
 				Game1.showGlobalMessage(translationHelper.Get("TODAY_HAS_FESTIVAL"));
