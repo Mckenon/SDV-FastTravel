@@ -6,12 +6,14 @@ using System.Text;
 namespace FastTravel
 {
     internal class CommandHandler
-    {
+	{
+		private readonly ModEntry modEntry;
         private readonly IMonitor Monitor;
         private readonly ModConfig ModConfig;
 
-        public CommandHandler(IMonitor monitor, ModConfig modConfig)
-        {
+        public CommandHandler(ModEntry modEntry, IMonitor monitor, ModConfig modConfig)
+		{
+			this.modEntry = modEntry;
             this.Monitor = monitor;
             this.ModConfig = modConfig;
         }
@@ -21,23 +23,23 @@ namespace FastTravel
         /// <param name="args">The command arguments.</param>
         public void HandleCommand(string command, string[] args)
         {
-            this.Monitor.Log(command, LogLevel.Warn);
+            Monitor.Log(command, LogLevel.Warn);
             switch (args.FirstOrDefault())
             {
                 case "locations":
-                    this.HandleLocations();
+                    HandleLocations();
                     break;
-
                 case "playerlocation":
-                    this.HandlePlayerLocation();
+                    HandlePlayerLocation();
                     break;
-
                 case "debugmode":
-                    this.HandleDebugMode(args);
+                    HandleDebugMode(args);
                     break;
-
+				case "reload":
+					HandleReloadConfig();
+					break;
                 default:
-                    this.HandleHelp();
+                    HandleHelp();
                     break;
             }
         }
@@ -64,11 +66,10 @@ namespace FastTravel
             report.AppendLine("\n#### PLAYER LOCATION ####");
             report.AppendLine("The tile position X and Y, you can be used on 'SpawnPosition' field, on config.json\n");
             report.AppendLine($"  - currentLocation.Name: {Game1.currentLocation.Name}");
-            report.AppendLine($"  - player tile position: X => {Game1.player.getTileX()} | Y => {Game1.player.getTileY()}");
+            report.AppendLine($"  - player tile position: X => {Game1.player.Tile.X} | Y => {Game1.player.Tile.Y}");
             report.AppendLine("################");
             this.Monitor.Log(report.ToString(), LogLevel.Info);
         }
-
 
         /// <summary>Handle the 'ft_helper debugmode' command.</summary>
         /// <param name="args">The command arguments.</param>
@@ -115,6 +116,13 @@ namespace FastTravel
             this.Monitor.Log(report.ToString(), LogLevel.Info);
         }
 
+		/// <summary>Reloads the mod configuration</summary>
+		private void HandleReloadConfig()
+		{
+			modEntry.ReloadConfig();
+			Monitor.Log("Attempted config reload", LogLevel.Info);
+		}
+		
         /// <summary>Handle the 'ft_helper' command.</summary>
         private void HandleHelp()
         {
@@ -124,6 +132,7 @@ namespace FastTravel
             report.AppendLine("    ft_helper locations: To list all locations on stardew valley.");
             report.AppendLine("    ft_helper playerlocation: To get a current player location informations.");
             report.AppendLine("    ft_helper debugmode: To change debug mode. Send 0 to disable, 1 to enable.\n");
+			report.AppendLine("    ft_helper reload: To reload the mod configuration.");
             this.Monitor.Log(report.ToString(), LogLevel.Info);
         }
     }

@@ -7,6 +7,6 @@ namespace FastTravel
     public struct FastTravelPointRequireObject
     {
         /// <summary>List of required mail flags, in <see cref="StardewValley.Farmer.mailReceived"/>.</summary>
-        public string[] mails;
+        public string[] Mails;
     }
 }

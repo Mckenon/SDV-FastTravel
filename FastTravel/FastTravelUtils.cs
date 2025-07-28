@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -10,7 +11,7 @@ namespace FastTravel
         /// <param name="point">The map point to check.</param>
         public static bool PointExistsInConfig(ClickableComponent point)
 		{
-            return ModEntry.Config.FastTravelPoints.Any(t => point.myID == t.pointId);
+            return ModEntry.Config.FastTravelPoints.Any(t => string.Equals(point.name, t.PointName, StringComparison.OrdinalIgnoreCase));
 		}
 
 		/// <summary>Checks if a player contains needed requirements to warp.</summary>
@@ -36,14 +37,14 @@ namespace FastTravel
 		/// <param name="point">The map point to check.</param>
 		public static GameLocation GetLocationForMapPoint(ClickableComponent point)
 		{
-			return Game1.locations[ModEntry.Config.FastTravelPoints.First(t => t.pointId == point.myID).GameLocationIndex];
+			return Game1.locations[ModEntry.Config.FastTravelPoints.First(t => string.Equals(point.name, t.PointName, StringComparison.OrdinalIgnoreCase)).GameLocationIndex];
 		}
 
 		/// <summary>Gets the fast travel info for a corresponding point on the map.</summary>
 		/// <param name="point">The map point to check.</param>
 		public static FastTravelPoint GetFastTravelPointForMapPoint(ClickableComponent point)
 		{
-            FastTravelPoint fastTravelPointResult = ModEntry.Config.FastTravelPoints.First(t => t.pointId == point.myID);
+			FastTravelPoint fastTravelPointResult = ModEntry.Config.FastTravelPoints.First(t => string.Equals(point.name, t.PointName, StringComparison.OrdinalIgnoreCase));
             fastTravelPointResult.MapName = point.name;
 
             return fastTravelPointResult;

@@ -13,23 +13,29 @@ namespace FastTravel
 	{
 		public static ModConfig Config;
         private ITranslationHelper translationHelper;
-        private CommandHandler CommandHandler;
-
+        private CommandHandler commandHandler;
+		private IModHelper helper;
+		
 		/// <summary>The mod entry point, called after the mod is first loaded.</summary>
 		/// <param name="helper">Provides simplified APIs for writing mods.</param>
 		public override void Entry(IModHelper helper)
 		{
+			this.helper = helper;
 			Config = helper.ReadConfig<ModConfig>();
-            this.translationHelper = helper.Translation;
+            translationHelper = helper.Translation;
+            commandHandler = new CommandHandler(this, Monitor, Config);
 
-            this.CommandHandler = new CommandHandler(this.Monitor, Config);
+            helper.Events.GameLoop.DayStarted += OnDayStarted;
+			helper.Events.Input.ButtonPressed += OnButtonPressed;
 
-            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
-			helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-
-            helper.ConsoleCommands.Add("ft_helper", "Run commands to help in develop mode.", this.CommandHandler.HandleCommand);
+            helper.ConsoleCommands.Add("ft_helper", "Run commands to help in develop mode.", commandHandler.HandleCommand);
 		}
 
+		public void ReloadConfig()
+		{
+			Config = helper.ReadConfig<ModConfig>();
+		}
+		
 		/// <summary>Raised after the game begins a new day (including when the player loads a save).</summary>
 		/// <param name="sender">The event sender.</param>
 		/// <param name="e">The event arguments.</param>
@@ -77,7 +83,7 @@ namespace FastTravel
 
 				int x = (int) e.Cursor.ScreenPixels.X;
 				int y = (int) e.Cursor.ScreenPixels.Y;
-                foreach (ClickableComponent point in mapPage.points)
+                foreach (ClickableComponent point in mapPage.points.Values)
 				{
 					// If the player isn't hovering over this point, don't worry about anything.
 					if (!point.containsPoint(x, y))
@@ -97,6 +103,19 @@ namespace FastTravel
                     // Make sure the location is valid
                     if (!FastTravelUtils.PointExistsInConfig(point))
 					{
+						if (Config.DebugMode)
+						{
+							var sb = new StringBuilder();
+							sb.AppendLine($"{{");
+							sb.AppendLine($"\t\"GameLocationIndex\" : {Game1.locations.IndexOf(Game1.currentLocation)},");
+							sb.AppendLine($"\t\"PointName\" : \"{point.name}\",");
+							sb.AppendLine($"\t\"SpawnPosition\" : {{ \"X\" : {Game1.player.Tile.X}, \"Y\" : {Game1.player.Tile.Y} }},");
+							sb.AppendLine($"\t\"Requires\" : null");
+							sb.AppendLine($"}}");
+							DesktopClipboard.SetText(sb.ToString());
+							Monitor.Log($"DBG: Point not found in config, copied to clipboard:\n{sb}", LogLevel.Warn);
+						}
+						
                         string message = translationHelper.Get("WARP_FAILED").ToString().Replace("{0}", $"[{point.name}]"); 
                         Monitor.Log(message, LogLevel.Warn);
 
@@ -128,11 +147,11 @@ namespace FastTravel
                     }
 
                     // Dismount the player if they're going to calico desert, since the bus glitches with mounts.
-                    if (targetPoint.GameLocationIndex == 28 && Game1.player.mount != null)
+                    if (targetPoint.GameLocationIndex == 29 && Game1.player.mount != null)
 						Game1.player.mount.dismount();
 					
 					// Warp the player to their location, and exit the map.
-					Game1.warpFarmer(targetPoint.RerouteName ?? targetLocation.Name, targetPoint.SpawnPosition.X, targetPoint.SpawnPosition.Y, false);
+					Game1.warpFarmer(targetLocation.Name, targetPoint.SpawnPosition.X, targetPoint.SpawnPosition.Y, false);
 					Game1.exitActiveMenu();
 
 					// Lets check for warp status and give the player feed back on what happened to the warp.
@@ -163,10 +182,10 @@ namespace FastTravel
         private bool CheckValidationBeforeTeleport(FastTravelPoint targetPoint, out string errorMessage)
         {
             errorMessage = "";
-            bool hasValidations = targetPoint.requires != null && targetPoint.requires?.mails.Length > 0;
+            bool hasValidations = targetPoint.Requires != null && targetPoint.Requires?.Mails.Length > 0;
             if (hasValidations)
             {
-                var validateTargetPoint = FastTravelUtils.CheckPointRequiredMails(targetPoint.requires?.mails);
+                var validateTargetPoint = FastTravelUtils.CheckPointRequiredMails(targetPoint.Requires?.Mails);
                 if (!validateTargetPoint.isValid)
                 {
                     errorMessage = translationHelper.Get($"mail.{validateTargetPoint.messageKeyId}");
@@ -184,7 +203,7 @@ namespace FastTravel
 			Thread.Sleep(Consts.MillisecondsToCheckIfWarped);
 
             // Check if we are at the new location and if its a festival day.
-            bool hasFestivalToday = Game1.currentLocation.Name != locName && Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason);
+			bool hasFestivalToday = Game1.currentLocation.Name != locName && Utility.isFestivalDay();
 
             if (hasFestivalToday)
 				Game1.showGlobalMessage(translationHelper.Get("TODAY_HAS_FESTIVAL"));
